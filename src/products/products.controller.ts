@@ -6,8 +6,10 @@ import {
   Post,
   Put,
   Query,
+  Req,
   UploadedFile,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiConsumes, ApiTags } from '@nestjs/swagger';
@@ -19,7 +21,9 @@ import { diskStorage } from 'multer';
 import { fileUploadService } from 'src/fileUpload/fileUpload.service';
 import { UpdateProducts } from './dto/updateproducts.dto';
 import { GetProducts } from './dto/getProducts.dto';
+import { JwtAuthGuard } from 'src/auth/lib/jwt-auth.guard';
 
+// @UseGuards(JwtAuthGuard)
 @ApiTags('products')
 @Controller('products')
 export class ProductsController {
@@ -45,14 +49,15 @@ export class ProductsController {
   )
   @Post('create')
   async createProducts(
+    @Req() req,
     @Body() createProduct: CreateProducts,
     @UploadedFiles() files: Express.Multer.File[],
   ) {
     let publicUrl;
     if (Array.isArray(files) && files.length > 0) {
-      publicUrl = await this.uploadService.uploadImages(files);
+      publicUrl = await this.uploadService.uploadImages('product', files);
     }
-    return this.productsService.createProducts(createProduct, publicUrl);
+    return this.productsService.createProducts(req, createProduct, publicUrl);
   }
 
   @ApiConsumes('multipart/form-data')
@@ -72,29 +77,35 @@ export class ProductsController {
   )
   @Put('update')
   async updateProducts(
+    @Req() req,
     @Query('id') id: string,
     @Body() updateProduct: UpdateProducts,
     @UploadedFiles() files: Express.Multer.File[],
   ) {
     let publicUrl;
     if (Array.isArray(files) && files.length > 0) {
-      publicUrl = await this.uploadService.uploadImages(files);
+      publicUrl = await this.uploadService.uploadImages('product', files);
     }
-    return this.productsService.updateProducts(id, updateProduct, publicUrl);
+    return this.productsService.updateProducts(
+      req,
+      id,
+      updateProduct,
+      publicUrl,
+    );
   }
 
   @Get('getAll')
-  async getAllProducts(@Query() data: GetProducts) {
-    return this.productsService.getAllProducts(data);
+  async getAllProducts(@Req() req, @Query() data: GetProducts) {
+    return this.productsService.getAllProducts(req, data);
   }
 
   @Get('getOne')
-  async getOneProducts(@Query('id') id: string) {
-    return this.productsService.getOneProducts(id);
+  async getOneProducts(@Req() req, @Query('id') id: string) {
+    return this.productsService.getOneProducts(req, id);
   }
 
   @Delete('delete')
-  async deleteProducts(@Query('id') id: string) {
-    return this.productsService.deleteProducts(id);
+  async deleteProducts(@Req() req, @Query('id') id: string) {
+    return this.productsService.deleteProducts(req, id);
   }
 }

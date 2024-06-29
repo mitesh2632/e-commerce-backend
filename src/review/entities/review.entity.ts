@@ -12,7 +12,10 @@ export class Review {
   rating: string;
 
   @Prop()
-  files: string;
+  files: any[];
+
+  @Prop()
+  user: string;
 }
 
 export type ReviewDocument = Review & Document;

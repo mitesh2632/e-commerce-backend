@@ -4,8 +4,8 @@ export class CreateProducts {
   @ApiProperty()
   name: string;
 
-  @ApiProperty()
-  rating: string;
+  @ApiPropertyOptional({ default: 0 })
+  rating: number;
 
   @ApiProperty()
   price: number;
@@ -13,13 +13,16 @@ export class CreateProducts {
   @ApiProperty()
   subTypeId: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
+  stock: number;
+
+  @ApiPropertyOptional()
   size: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   color: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   description: string;
 
   @ApiPropertyOptional()

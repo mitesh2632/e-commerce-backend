@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class ReviewDto {
   @ApiProperty()
@@ -10,6 +10,6 @@ export class ReviewDto {
   @ApiProperty()
   rating: string;
 
-  @ApiProperty()
-  files: string;
+  @ApiPropertyOptional({ format: 'binary' })
+  files: Express.Multer.File[];
 }

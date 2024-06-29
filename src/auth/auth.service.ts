@@ -18,9 +18,19 @@ export class AuthService {
     this.googleAuthClient = new OAuth2Client(this.clientId);
   }
 
+  async getUserIdFromToken(request) {
+    let authHeader = request.headers.authorization;
+    const decodedJwt = this.jwtService.decode(authHeader.split(' ')[1]) as any;
+    const user = await this.authModal.findOne({ _id: decodedJwt?.id });
+    if (!user) {
+      throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
+    }
+    return user;
+  }
+
   async register(req, data) {
     try {
-      const { email, password } = data;
+      const { email, password, name } = data;
       const userData = await this.authModal.findOne({ email });
       if (userData) {
         throw new HttpException(
@@ -33,6 +43,7 @@ export class AuthService {
       const user = await this.authModal.create({
         email: email,
         password: newPassword,
+        name: name,
       });
 
       const token = this.jwtService.sign(

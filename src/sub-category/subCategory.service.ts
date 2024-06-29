@@ -18,7 +18,7 @@ export class SubCategoryService {
     private SubCategoryModel: Model<SubCategoryDocument>,
   ) {}
 
-  async createSubCategory(createSubCategory) {
+  async createSubCategory(req, createSubCategory) {
     try {
       const { name, categoryId } = createSubCategory;
       const newName = await this.SubCategoryModel.findOne({ name });
@@ -43,7 +43,7 @@ export class SubCategoryService {
     }
   }
 
-  async updateSubCategory(id, updateSubCategory) {
+  async updateSubCategory(req, id, updateSubCategory) {
     try {
       const data = await this.SubCategoryModel.findByIdAndUpdate(
         id,
@@ -67,7 +67,7 @@ export class SubCategoryService {
     }
   }
 
-  async getAllSubCategory() {
+  async getAllSubCategory(req) {
     try {
       const data = await this.SubCategoryModel.find();
 
@@ -81,7 +81,7 @@ export class SubCategoryService {
     }
   }
 
-  async getOneSubCategory(id) {
+  async getOneSubCategory(req, id) {
     try {
       // Populate
       // const data =
@@ -126,7 +126,7 @@ export class SubCategoryService {
     }
   }
 
-  async deleteSubCategory(id) {
+  async deleteSubCategory(req, id) {
     try {
       const data = await this.SubCategoryModel.findByIdAndDelete(id);
 

@@ -7,15 +7,18 @@ import {
 import { Model } from 'mongoose';
 import { Category, CategoryDocument } from './entities/category.entity';
 import { InjectModel } from '@nestjs/mongoose';
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class CategoryService {
   constructor(
     @InjectModel(Category.name) private CategoryModal: Model<CategoryDocument>,
+    private readonly authService: AuthService,
   ) {}
 
-  async createCategory(name, type) {
+  async createCategory(req, name, type) {
     try {
+      const user = await this.authService.getUserIdFromToken(req);
       const newName = await this.CategoryModal.findOne({ name });
       const newType = await this.CategoryModal.findOne({ type });
 
@@ -40,7 +43,7 @@ export class CategoryService {
     }
   }
 
-  async updateCategory(id, name, type) {
+  async updateCategory(req, id, name, type) {
     try {
       const body = { name, type };
 
@@ -62,8 +65,11 @@ export class CategoryService {
     }
   }
 
-  async getAllCategory() {
+  async getAllCategory(req) {
     try {
+      const user = await this.authService.getUserIdFromToken(req);
+      console.log('user', user);
+
       const data = await this.CategoryModal.find();
 
       return {
@@ -76,7 +82,7 @@ export class CategoryService {
     }
   }
 
-  async getOneCategory(id) {
+  async getOneCategory(req, id) {
     try {
       const data = await this.CategoryModal.findById(id);
 
@@ -90,7 +96,7 @@ export class CategoryService {
     }
   }
 
-  async deleteCategory(id) {
+  async deleteCategory(req, id) {
     try {
       await this.CategoryModal.findByIdAndDelete(id);
 

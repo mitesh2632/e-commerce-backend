@@ -2,14 +2,16 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Products, ProductsDocument } from './entities/products.entity';
 import mongoose, { Model } from 'mongoose';
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectModel(Products.name) private ProductsModel: Model<ProductsDocument>,
+    private readonly authService: AuthService,
   ) {}
 
-  async createProducts(createProductsDto, publicUrl) {
+  async createProducts(req, createProductsDto, publicUrl) {
     try {
       const data = await this.ProductsModel.create({ ...createProductsDto });
       data.files = [...data.files, ...publicUrl];
@@ -25,7 +27,7 @@ export class ProductsService {
     }
   }
 
-  async updateProducts(id, updateProductsDto, publicUrl) {
+  async updateProducts(req, id, updateProductsDto, publicUrl) {
     try {
       const product = await this.ProductsModel.findOne({ _id: id });
 
@@ -55,7 +57,7 @@ export class ProductsService {
     }
   }
 
-  async getAllProducts(filterData) {
+  async getAllProducts(req, filterData) {
     try {
       const { size, color, name, page, limit, category, minPrice, maxPrice } =
         filterData;
@@ -188,7 +190,7 @@ export class ProductsService {
     }
   }
 
-  async getOneProducts(id) {
+  async getOneProducts(req, id) {
     try {
       const newData = await this.ProductsModel.findOne({ _id: id });
 
@@ -276,7 +278,7 @@ export class ProductsService {
     }
   }
 
-  async deleteProducts(id) {
+  async deleteProducts(req, id) {
     try {
       const newData = await this.ProductsModel.findOne({ _id: id });
 

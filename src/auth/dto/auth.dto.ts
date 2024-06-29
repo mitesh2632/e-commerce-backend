@@ -6,4 +6,7 @@ export class AuthDto {
 
   @ApiProperty()
   password: string;
+
+  @ApiProperty()
+  name: string;
 }

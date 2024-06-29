@@ -14,7 +14,7 @@ export class SubTypeService {
     @InjectModel(SubType.name) private SubTypeModel: Model<SubTypeDocument>,
   ) {}
 
-  async createSubType(createSubTypeDto) {
+  async createSubType(req, createSubTypeDto) {
     try {
       const { name, categoryId } = createSubTypeDto;
       const newName = await this.SubTypeModel.findOne({ name });
@@ -39,7 +39,7 @@ export class SubTypeService {
     }
   }
 
-  async updateSubType(id, updateSubType) {
+  async updateSubType(req, id, updateSubType) {
     try {
       const data = await this.SubTypeModel.findByIdAndUpdate(
         id,
@@ -61,7 +61,7 @@ export class SubTypeService {
     }
   }
 
-  async getOneSubType(id) {
+  async getOneSubType(req, id) {
     try {
       const newId = await this.SubTypeModel.findOne({ _id: id });
 
@@ -135,7 +135,7 @@ export class SubTypeService {
     }
   }
 
-  async getAllSubType() {
+  async getAllSubType(req) {
     try {
       const data = await this.SubTypeModel.find();
 
@@ -149,7 +149,7 @@ export class SubTypeService {
     }
   }
 
-  async deleteSubType(id) {
+  async deleteSubType(req, id) {
     try {
       const newId = await this.SubTypeModel.findOne({ _id: id });
       if (!newId) {
