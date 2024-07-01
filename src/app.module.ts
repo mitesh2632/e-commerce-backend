@@ -9,6 +9,7 @@ import { SubCategoryModule } from './sub-category/subCategory.module';
 import { SubTypeModule } from './sub-type/subType.module';
 import { ProductsModule } from './products/products.module';
 import { ReviewModule } from './review/review.module';
+import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ReviewModule } from './review/review.module';
     SubTypeModule,
     ProductsModule,
     ReviewModule,
+    CartModule,
   ],
   controllers: [AppController],
   providers: [AppService],

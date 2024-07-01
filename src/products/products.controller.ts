@@ -23,7 +23,7 @@ import { UpdateProducts } from './dto/updateproducts.dto';
 import { GetProducts } from './dto/getProducts.dto';
 import { JwtAuthGuard } from 'src/auth/lib/jwt-auth.guard';
 
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 @ApiTags('products')
 @Controller('products')
 export class ProductsController {
